@@ -7,7 +7,10 @@ const { bookVolume } = defineProps<{
 </script>
 
 <template>
-  <div>{{ bookVolume.volumeInfo.title }}</div>
+  <UCard>
+    <div>{{ bookVolume.volumeInfo.title ?? "—" }}</div>
+    <div>{{ bookVolume.volumeInfo.authors?.join(", ") ?? "—" }}</div>
+  </UCard>
 </template>
 
 <style scoped></style>
