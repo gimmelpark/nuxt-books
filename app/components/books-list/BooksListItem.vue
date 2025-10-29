@@ -12,6 +12,8 @@ const publicationDate = computed(() =>
     : "",
 );
 
+const { data: language } = useFetch(`/api/language/${bookInfo.value.language}`);
+
 // const thumbnailUrl = computed(
 //   () =>
 //     bookVolume.volumeInfo?.imageLinks?.smallThumbnail ??
@@ -22,20 +24,24 @@ const publicationDate = computed(() =>
 
 <template>
   <UContainer
-    class="ring-default hover:bg-secondary-50 cursor-pointer rounded-lg py-4 ring"
+    class="ring-primary cursor-pointer rounded-lg py-4 ring hover:bg-gray-100"
   >
     <div class="flex justify-between">
       <div class="font-bold">{{ bookInfo.title ?? "—" }}</div>
 
-      <div>{{ publicationDate }}</div>
+      <div class="text-secondary-500 ml-2">{{ language }}</div>
     </div>
 
-    <div class="text-gray-500">
-      {{ bookInfo.authors?.join(", ") ?? "—" }}
+    <div class="flex justify-between">
+      <div class="text-gray-500">
+        {{ bookInfo.authors?.join(", ") ?? "—" }}
+      </div>
+
+      <div class="ml-2 text-gray-500">{{ publicationDate }}</div>
     </div>
 
     <template v-if="bookInfo.subtitle">
-      <USeparator class="my-2 w-full" />
+      <USeparator class="my-2 w-full" color="primary" />
 
       <div class="text-sm text-gray-500">{{ bookInfo.subtitle }}</div>
     </template>
