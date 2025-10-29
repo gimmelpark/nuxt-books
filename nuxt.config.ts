@@ -5,7 +5,7 @@ export default defineNuxtConfig({
     compatibilityVersion: 4,
   },
   devtools: { enabled: true },
-  modules: ["@nuxt/eslint", "@nuxt/ui", "@nuxt/icon"],
+  modules: ["@nuxt/eslint", "@nuxt/ui", "@nuxt/icon", "@nuxt/image"],
   runtimeConfig: {
     public: {
       apiBaseUrl: "https://www.googleapis.com/books/v1",

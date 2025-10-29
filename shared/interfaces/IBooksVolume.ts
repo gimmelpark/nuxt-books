@@ -9,5 +9,10 @@ export interface IBooksVolume {
     pageCount?: number;
     printedPageCount?: number;
     language?: string;
+    description?: string;
+    imageLinks?: {
+      smallThumbnail?: string;
+      thumbnail?: string;
+    };
   };
 }

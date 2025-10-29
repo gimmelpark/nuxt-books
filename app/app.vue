@@ -1,11 +1,11 @@
 <template>
   <UApp>
-    <UHeader :toggle="false" title="Nuxt Books">
-      <template #title>
-        <UIcon name="custom:logo" class="size-7" />
-        <span>Nuxt Books</span>
-      </template>
-    </UHeader>
+    <!--    <UHeader :toggle="false" title="Nuxt Books">-->
+    <!--      <template #title>-->
+    <!--        <UIcon name="custom:logo" class="size-7" />-->
+    <!--        <span>Nuxt Books</span>-->
+    <!--      </template>-->
+    <!--    </UHeader>-->
 
     <UMain>
       <NuxtPage />
