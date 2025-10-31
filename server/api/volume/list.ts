@@ -5,12 +5,17 @@ export default defineEventHandler((event) => {
   const config = useRuntimeConfig(event);
   const apiKey = process.env.GOOGLE_BOOKS_API_KEY;
 
-  const query: IBooksSearchFilter = getQuery(event);
+  const query: IBooksSearchFilter & { size: number; page: number } =
+    getQuery(event);
+
+  const size = config.public.apiPageSize as number;
 
   return $fetch<IBooksVolumeList>(`${config.public.apiBaseUrl}/volumes`, {
     method: "GET",
     params: {
       q: query.searchString,
+      maxResults: size,
+      startIndex: size * query.page,
       key: apiKey,
     },
   });

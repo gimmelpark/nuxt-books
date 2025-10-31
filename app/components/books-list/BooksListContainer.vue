@@ -1,45 +1,93 @@
 <script setup lang="ts">
 import type { IBooksSearchFilter } from "#shared/interfaces/IBooksSearchFilter";
-import type { IBooksVolume } from "#shared/interfaces/IBooksVolume";
 import type { IBooksVolumeList } from "#shared/interfaces/IBooksVolumeList";
+import type { IBooksVolume } from "#shared/interfaces/IBooksVolume";
 
-const searchFilters = ref<IBooksSearchFilter>({ searchString: "" });
+const route = useRoute();
+const searchFilters = computed(() => ({ searchString: "", ...route.query }));
+const page = ref<number>(0);
 
-const books = ref<IBooksVolume[] | null>(null);
+const { data, pending, refresh } = useAsyncData<IBooksVolumeList>(
+  "books",
+  () =>
+    $fetch<IBooksVolumeList>("/api/volume/list", {
+      params: {
+        ...searchFilters.value,
+        page: page.value,
+      },
+    }),
+  {
+    immediate: !!searchFilters.value.searchString,
+  },
+);
 
+const books = ref<null | IBooksVolume[]>(null);
+watch(data, (value) => {
+  if (value) {
+    books.value = [...(books.value ?? []), ...value.items];
+  }
+});
 const isBooksLoaded = computed(() => books.value !== null);
 
-async function onSearch() {
-  const response = await $fetch<IBooksVolumeList>("/api/volume/list", {
-    params: searchFilters.value,
+const isLoadingNewSearch = computed(
+  () => books.value === null && pending.value,
+);
+const isLoadingMore = computed(() => books.value !== null && pending.value);
+
+async function onSearch(filters: IBooksSearchFilter) {
+  books.value = null;
+  page.value = 0;
+
+  await navigateTo({
+    path: route.path,
+    query: { ...filters },
   });
 
-  books.value = response.items;
+  await refresh();
 }
+
+const listScrollRef = useTemplateRef("listScroll");
+watch(listScrollRef, (value, oldValue) => {
+  if (oldValue === null && value !== null) {
+    useInfiniteScroll(
+      value as HTMLElement,
+      async () => {
+        page.value++;
+        await refresh();
+      },
+      { distance: 30 },
+    );
+  }
+});
 </script>
 
 <template>
   <div
-    class="box-border flex h-screen max-h-screen w-full flex-col justify-center overflow-y-hidden"
+    class="box-border flex h-screen max-h-screen w-full flex-col overflow-y-hidden"
+    :class="{ 'justify-center': !isLoadingNewSearch }"
   >
     <BooksListSearchInput
       :search-filters="searchFilters"
+      :is-loading="isLoadingNewSearch"
       class="mt-3 mb-3"
-      @update-filters="searchFilters = $event"
       @search="onSearch"
     />
 
-    <template v-if="isBooksLoaded">
+    <template v-if="isBooksLoaded || isLoadingNewSearch">
       <USeparator />
 
-      <div class="flex justify-center overflow-y-auto pt-5">
-        <div class="h-fit w-150">
+      <div ref="listScroll" class="flex justify-center overflow-y-auto pt-5">
+        <Loader v-if="isLoadingNewSearch" />
+
+        <div v-else class="h-fit w-150">
           <BooksListItem
             v-for="book in books"
             class="mb-5"
             :key="book.id"
             :book-volume="book"
           />
+
+          <Loader v-if="isLoadingMore" />
         </div>
       </div>
     </template>
