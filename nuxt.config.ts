@@ -27,4 +27,13 @@ export default defineNuxtConfig({
       },
     ],
   },
+  app: {
+    head: {
+      title: "Nuxt Books",
+      htmlAttrs: {
+        lang: "en",
+      },
+      link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+    },
+  },
 });

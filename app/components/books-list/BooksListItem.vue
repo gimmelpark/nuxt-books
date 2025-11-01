@@ -13,13 +13,6 @@ const publicationDate = computed(() =>
 );
 
 const { data: language } = useFetch(`/api/language/${bookInfo.value.language}`);
-
-// const thumbnailUrl = computed(
-//   () =>
-//     bookVolume.volumeInfo?.imageLinks?.smallThumbnail ??
-//     bookVolume.volumeInfo?.imageLinks?.thumbnail ??
-//     "",
-// );
 </script>
 
 <template>
@@ -47,5 +40,3 @@ const { data: language } = useFetch(`/api/language/${bookInfo.value.language}`);
     </template>
   </UContainer>
 </template>
-
-<style scoped></style>

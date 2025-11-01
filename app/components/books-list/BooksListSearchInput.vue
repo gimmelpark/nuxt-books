@@ -18,6 +18,8 @@ const emit = defineEmits<{
 
 const localSearchString = ref<string>(searchFilters.searchString);
 
+const isHydrated = useIsHydrated();
+
 watch(
   () => searchFilters,
   (value) => {
@@ -28,7 +30,7 @@ watch(
 );
 
 function onSearch() {
-  if (localSearchString.value && !isLoading) {
+  if (localSearchString.value && !isLoading && isHydrated) {
     searchInputRef.value?.inputRef.blur();
     emit("search", { searchString: localSearchString.value });
   }
@@ -50,12 +52,11 @@ defineShortcuts({
       name="searchInput"
       icon="material-symbols-light:search-rounded"
       class="w-100"
+      :disabled="!isHydrated"
       :placeholder="isLoading ? 'Loading...' : 'Search for books'"
-      :loading="isLoading"
+      :loading="isLoading || !isHydrated"
     />
 
     <UButton class="ml-2 cursor-pointer" @click="onSearch">Search</UButton>
   </div>
 </template>
-
-<style scoped></style>

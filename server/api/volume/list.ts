@@ -10,6 +10,10 @@ export default defineEventHandler((event) => {
 
   const size = config.public.apiPageSize as number;
 
+  if (!query.searchString) {
+    throw new Error("no query string.");
+  }
+
   return $fetch<IBooksVolumeList>(`${config.public.apiBaseUrl}/volumes`, {
     method: "GET",
     params: {
