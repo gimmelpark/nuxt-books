@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  name: "books-list",
+});
+
 const route = useRoute();
 
 const pageTitle = computed(() =>

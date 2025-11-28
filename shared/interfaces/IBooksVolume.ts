@@ -1,3 +1,5 @@
+import type { IBooksVolumeImageLinks } from "./IBooksVolumeImageLinks";
+
 export interface IBooksVolume {
   id: string;
   volumeInfo: {
@@ -10,13 +12,6 @@ export interface IBooksVolume {
     printedPageCount?: number;
     language?: string;
     description?: string;
-    imageLinks?: {
-      smallThumbnail?: string;
-      thumbnail?: string;
-      small?: string;
-      medium?: string;
-      large?: string;
-      extraLarge?: string;
-    };
+    imageLinks?: IBooksVolumeImageLinks;
   };
 }

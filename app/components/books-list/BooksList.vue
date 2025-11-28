@@ -19,7 +19,7 @@ const queryParams = computed(() => ({
 const books = useState<null | IBooksVolume[]>("books", () => null);
 const totalItems = useState<null | number>("total-items", () => null);
 
-const { status } = useFetch<IBooksVolumeList>("/api/volume/list", {
+const { status } = useFetch<IBooksVolumeList>("/api/books", {
   query: queryParams,
   onResponse({ response: { _data: data } }) {
     if (!data) throw new Error("No data");
