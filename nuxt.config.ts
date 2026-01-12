@@ -12,6 +12,9 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@vueuse/nuxt",
   ],
+  image: {
+    domains: ["books.google.com"],
+  },
   runtimeConfig: {
     public: {
       apiBaseUrl: "https://www.googleapis.com/books/v1",
